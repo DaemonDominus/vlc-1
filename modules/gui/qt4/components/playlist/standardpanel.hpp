@@ -140,7 +140,7 @@ private slots:
     void toggleColumnShown( int );
 
     void cycleViews();
-    void shufflePlaylist(const QModelIndex & );
+    void shufflePlaylist();
 
 signals:
     void viewChanged( const QModelIndex& );

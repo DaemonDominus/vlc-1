@@ -60,8 +60,10 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QFont>
+#include <QModelIndex>
 
 #include <assert.h>
+
 
 StandardPLPanel::StandardPLPanel( PlaylistWidget *_parent,
                                   intf_thread_t *_p_intf,
@@ -710,70 +712,29 @@ void StandardPLPanel::cycleViews()
         assert( 0 );
 }
 
-void StandardPLPanel::shufflePlaylist(const QModelIndex &index )
+void StandardPLPanel::shufflePlaylist()
 {
- /*My code to shuffle and fill the Playrlist*/
-    /*playlist_Lock( THEPL );
+ /*My code to shuffle and fill the Playlist*/
+	//playlist_Lock( THEPL );
+	PLModel *p_plModel = PLModel::getPLModel(StandardPLPanel::p_intf);
+	int i_rowCount = p_plModel->rowCount();
+	if( i_rowCount > 1 )
+	{
 
-    playlist_item_t *p_temp;
-    playlist_item_array_t pp_items = THEPL->all_items;
-    p_temp = pp_items[0];
-	pp_items[0] = pp_items[1];
-	pp_items[1] = p_temp;
-	playlist_Unlock( THEPL );*/
+	    QModelIndexList l;
+	    for( int i = 0; i < i_rowCount; i++)
+	    {
+	        QModelIndex indexrecord = p_plModel->index( i, 0, QModelIndex() );
+	        input_item_t * p_item = p_plModel->getInputItem(indexrecord);
+	        //cout <<  p_item->psz_uri;
+	        l.append( indexrecord );
+	    }
+	    p_plModel->doDelete(l);
+	}
+	playlist_Add( THEPL, "file:///media/DATA/Mix%20Playlist/08.%20Beautiful%20South%20-%20Rotterdam%20%28or%20Anywhere%29.mp3", "blabla", PLAYLIST_APPEND, PLAYLIST_END, true,false );
+	//p_plModel->removeItem(0);
+	//playlist_Unlock( THEPL );
 
-	FOREACH_ARRAY( playlist_item_t *p_del, THEPL->all_items )
-	        free( p_del->pp_children );
-	        vlc_gc_decref( p_del->p_input );
-	        free( p_del );
-	    FOREACH_END();
-
-	    vlc_object_release( THEPL );
-
-	//if( currentView->model() == model )
-	   // {
-	        /* If we are not a leaf node */
-	      //  if( !index.data( PLModel::IsLeafNodeRole ).toBool() )
-	        //{
-	         //   if( currentView != treeView )
-	         //       browseInto( index );
-	        //}
-	        //else
-	        //{
-	            /*playlist_Lock( THEPL );
-	            playlist_item_t *p_item = playlist_ItemGetById( THEPL, model->itemId( index ) );
-	            playlist_item_t *p_item_two = playlist_ItemGetById( THEPL, model->itemId( 2 ) );
-	            p_item->i_flags |= PLAYLIST_SUBITEM_STOP_FLAG;
-	            lastActivatedId = p_item->i_id;
-	            playlist_Unlock( THEPL );
-	            model->activateItem( index );*/
-	        //}
-	   // }
-
-	//FOR INSPECTION
-			/*static inline
-		void playlist_ItemArraySort( unsigned i_items, playlist_item_t **pp_items,
-									 sortfn_t p_sortfn )
-		{
-			if( p_sortfn )
-			{
-				qsort( pp_items, i_items, sizeof( pp_items[0] ), p_sortfn );
-			}
-			else
-			{
-				unsigned i_position;
-				unsigned i_new;
-				playlist_item_t *p_temp;
-
-				for( i_position = i_items - 1; i_position > 0; i_position-- )
-				{
-					i_new = ((unsigned)vlc_mrand48()) % (i_position+1);
-					p_temp = pp_items[i_position];
-					pp_items[i_position] = pp_items[i_new];
-					pp_items[i_new] = p_temp;
-				}
-			}
-		} */
 }
 
 void StandardPLPanel::activate( const QModelIndex &index )
