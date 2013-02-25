@@ -123,6 +123,14 @@ PlaylistWidget::PlaylistWidget( intf_thread_t *_p_i, QWidget *_par )
     viewButton->setMenu( StandardPLPanel::viewSelectionMenu( mainView ));
     CONNECT( viewButton, clicked(), mainView, cycleViews() );
 
+    /* Button to shuffle playlist */
+    QToolButton *shuffleButton = new QToolButton( this );
+    shuffleButton->setIcon(QIcon( ":/buttons/playlist/shuffle_on"));
+    shuffleButton->setToolTip( qtr("Shuffle the playlist") );
+    topbarLayout->addWidget( shuffleButton );
+
+    CONNECT( shuffleButton, clicked(), mainView, shufflePlaylist() ); /* cycleViews will be replaced by the shuffle method*/
+
     /* Search */
     searchEdit = new SearchLineEdit( this );
     searchEdit->setMaximumWidth( 250 );

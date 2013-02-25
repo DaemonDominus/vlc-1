@@ -710,6 +710,72 @@ void StandardPLPanel::cycleViews()
         assert( 0 );
 }
 
+void StandardPLPanel::shufflePlaylist(const QModelIndex &index )
+{
+ /*My code to shuffle and fill the Playrlist*/
+    /*playlist_Lock( THEPL );
+
+    playlist_item_t *p_temp;
+    playlist_item_array_t pp_items = THEPL->all_items;
+    p_temp = pp_items[0];
+	pp_items[0] = pp_items[1];
+	pp_items[1] = p_temp;
+	playlist_Unlock( THEPL );*/
+
+	FOREACH_ARRAY( playlist_item_t *p_del, THEPL->all_items )
+	        free( p_del->pp_children );
+	        vlc_gc_decref( p_del->p_input );
+	        free( p_del );
+	    FOREACH_END();
+
+	    vlc_object_release( THEPL );
+
+	//if( currentView->model() == model )
+	   // {
+	        /* If we are not a leaf node */
+	      //  if( !index.data( PLModel::IsLeafNodeRole ).toBool() )
+	        //{
+	         //   if( currentView != treeView )
+	         //       browseInto( index );
+	        //}
+	        //else
+	        //{
+	            /*playlist_Lock( THEPL );
+	            playlist_item_t *p_item = playlist_ItemGetById( THEPL, model->itemId( index ) );
+	            playlist_item_t *p_item_two = playlist_ItemGetById( THEPL, model->itemId( 2 ) );
+	            p_item->i_flags |= PLAYLIST_SUBITEM_STOP_FLAG;
+	            lastActivatedId = p_item->i_id;
+	            playlist_Unlock( THEPL );
+	            model->activateItem( index );*/
+	        //}
+	   // }
+
+	//FOR INSPECTION
+			/*static inline
+		void playlist_ItemArraySort( unsigned i_items, playlist_item_t **pp_items,
+									 sortfn_t p_sortfn )
+		{
+			if( p_sortfn )
+			{
+				qsort( pp_items, i_items, sizeof( pp_items[0] ), p_sortfn );
+			}
+			else
+			{
+				unsigned i_position;
+				unsigned i_new;
+				playlist_item_t *p_temp;
+
+				for( i_position = i_items - 1; i_position > 0; i_position-- )
+				{
+					i_new = ((unsigned)vlc_mrand48()) % (i_position+1);
+					p_temp = pp_items[i_position];
+					pp_items[i_position] = pp_items[i_new];
+					pp_items[i_new] = p_temp;
+				}
+			}
+		} */
+}
+
 void StandardPLPanel::activate( const QModelIndex &index )
 {
     if( currentView->model() == model )
