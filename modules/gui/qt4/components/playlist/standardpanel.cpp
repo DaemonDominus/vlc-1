@@ -65,6 +65,9 @@
 #include <assert.h>
 
 
+#include <iostream>
+#include <string.h>
+
 StandardPLPanel::StandardPLPanel( PlaylistWidget *_parent,
                                   intf_thread_t *_p_intf,
                                   playlist_item_t *p_root,
@@ -718,6 +721,17 @@ void StandardPLPanel::shufflePlaylist()
 	//playlist_Lock( THEPL );
 	PLModel *p_plModel = PLModel::getPLModel(StandardPLPanel::p_intf);
 	int i_rowCount = p_plModel->rowCount();
+	unsigned int i_max = 0;
+	for( int i = 0; i < i_rowCount; i++)
+	{
+		QModelIndex indexrecord = p_plModel->index( i, 0, QModelIndex() );
+		input_item_t * p_item = p_plModel->getInputItem(indexrecord);
+		i_max = strlen(p_item->psz_uri) > i_max ? strlen(p_item->psz_uri) : i_max;
+
+	}
+
+	char shuffle[i_rowCount][i_max + 1];
+
 	if( i_rowCount > 1 )
 	{
 
@@ -726,13 +740,17 @@ void StandardPLPanel::shufflePlaylist()
 	    {
 	        QModelIndex indexrecord = p_plModel->index( i, 0, QModelIndex() );
 	        input_item_t * p_item = p_plModel->getInputItem(indexrecord);
-	        //cout <<  p_item->psz_uri;
+	        strcpy( shuffle[i], p_item->psz_uri );
 	        l.append( indexrecord );
 	    }
 	    p_plModel->doDelete(l);
+
+	    for( int i = i_rowCount-1; i > -1; i--)
+	    {
+	    	playlist_Add( THEPL, shuffle[i], NULL, PLAYLIST_APPEND, PLAYLIST_END, true,false );
+	    }
 	}
-	playlist_Add( THEPL, "file:///media/DATA/Mix%20Playlist/08.%20Beautiful%20South%20-%20Rotterdam%20%28or%20Anywhere%29.mp3", "blabla", PLAYLIST_APPEND, PLAYLIST_END, true,false );
-	//p_plModel->removeItem(0);
+
 	//playlist_Unlock( THEPL );
 
 }
