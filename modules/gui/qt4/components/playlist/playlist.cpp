@@ -125,7 +125,7 @@ PlaylistWidget::PlaylistWidget( intf_thread_t *_p_i, QWidget *_par )
 
     /* Button to shuffle playlist */
     QToolButton *shuffleButton = new QToolButton( this );
-    shuffleButton->setIcon(QIcon( ":/buttons/playlist/shuffle_on"));
+    shuffleButton->setIcon(QIcon( ":/buttons/playlist/shuffle_playlist"));
     shuffleButton->setToolTip( qtr("Shuffle the playlist") );
     topbarLayout->addWidget( shuffleButton );
 

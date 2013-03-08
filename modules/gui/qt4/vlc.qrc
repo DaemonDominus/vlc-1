@@ -73,6 +73,7 @@
         <file alias="repeat_all">pixmaps/playlist/repeat_all.png</file>
         <file alias="repeat_one">pixmaps/playlist/repeat_one.png</file>
         <file alias="shuffle_on">pixmaps/playlist/shuffle_on.png</file>
+	<file alias="shuffle_playlist">pixmaps/playlist/shuffle_playlist.png</file>
         <file alias="jump_to">pixmaps/playlist/jumpto.png</file>
     </qresource>
     <qresource prefix="/type">

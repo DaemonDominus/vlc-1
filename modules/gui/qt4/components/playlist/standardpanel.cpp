@@ -65,9 +65,6 @@
 #include <assert.h>
 
 
-#include <iostream>
-#include <string.h>
-
 StandardPLPanel::StandardPLPanel( PlaylistWidget *_parent,
                                   intf_thread_t *_p_intf,
                                   playlist_item_t *p_root,
@@ -745,7 +742,23 @@ void StandardPLPanel::shufflePlaylist()
 	    }
 	    p_plModel->doDelete(l);
 
-	    for( int i = i_rowCount-1; i > -1; i--)
+	    srand( time(NULL) );
+	    int i_ub, i_j;
+	    char psz_tmp[i_max + 1];
+	    for( int i = i_rowCount-1; i > 0; i--)
+	    {
+	    	i_ub = RAND_MAX - ( ( RAND_MAX % (i + 1) ) + 1);
+
+	    	do
+	    	{
+	    		i_j = rand() & (i + 1);
+	    	} while (i_j > i_ub);
+
+	    	strcpy( psz_tmp, shuffle[i_j] );
+	    	strcpy( shuffle[i_j], shuffle[i] );
+	    	strcpy( shuffle[i], psz_tmp );
+	    }
+	    for( int i = 0; i < i_rowCount; i++)
 	    {
 	    	playlist_Add( THEPL, shuffle[i], NULL, PLAYLIST_APPEND, PLAYLIST_END, true,false );
 	    }
