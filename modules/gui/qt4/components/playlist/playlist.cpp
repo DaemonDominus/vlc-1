@@ -128,8 +128,7 @@ PlaylistWidget::PlaylistWidget( intf_thread_t *_p_i, QWidget *_par )
     shuffleButton->setIcon(QIcon( ":/buttons/playlist/shuffle_playlist"));
     shuffleButton->setToolTip( qtr("Shuffle the playlist") );
     topbarLayout->addWidget( shuffleButton );
-
-    CONNECT( shuffleButton, clicked(), mainView, shufflePlaylist() ); /* cycleViews will be replaced by the shuffle method*/
+    CONNECT( shuffleButton, clicked(), mainView, shufflePlaylist() );
 
     /* Search */
     searchEdit = new SearchLineEdit( this );

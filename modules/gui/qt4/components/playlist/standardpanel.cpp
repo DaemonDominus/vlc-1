@@ -724,42 +724,37 @@ void StandardPLPanel::shufflePlaylist()
 		i_max = strlen(p_item->psz_uri) > i_max ? strlen(p_item->psz_uri) : i_max;
 
 	}
-
-
-
 	if( i_rowCount > 1 )
 	{
-
 		char shuffle[i_rowCount][i_max + 1];
-	    QModelIndexList l;
-	    for( int i = 0; i < i_rowCount; i++)
-	    {
-	        QModelIndex indexrecord = p_plModel->index( i, 0, QModelIndex() );
-	        input_item_t * p_item = p_plModel->getInputItem(indexrecord);
-	        strcpy( shuffle[i], p_item->psz_uri );
-	        l.append( indexrecord );
-	    }
-	    p_plModel->doDelete(l);
-
-	    srand( time(NULL) );
-	    char psz_tmp[i_max + 1];
-	    int i_limit = RAND_MAX - RAND_MAX % i_rowCount;
-	    int i_j;
-	    for( int i = i_rowCount-1; i > 0; i--)
-	    {
-	    	do
-	    	{
-	    		i_j = rand();
-	    	} while (i_j >= i_limit);
-	    	i_j %= i_rowCount;
-	    	strcpy( psz_tmp, shuffle[i_j] );
-	    	strcpy( shuffle[i_j], shuffle[i] );
-	    	strcpy( shuffle[i], psz_tmp );
-	    }
-	    for( int i = 0; i < i_rowCount; i++)
-	    {
-	    	playlist_Add( THEPL, shuffle[i], NULL, PLAYLIST_APPEND, PLAYLIST_END, true,false );
-	    }
+		QModelIndexList l;
+		for( int i = 0; i < i_rowCount; i++)
+		{
+			QModelIndex indexrecord = p_plModel->index( i, 0, QModelIndex() );
+			input_item_t * p_item = p_plModel->getInputItem(indexrecord);
+			strcpy( shuffle[i], p_item->psz_uri );
+			l.append( indexrecord );
+		}
+		p_plModel->doDelete(l);
+		srand( time(NULL) );
+		char psz_tmp[i_max + 1];
+		int i_limit = RAND_MAX - RAND_MAX % i_rowCount;
+		int i_j;
+		for( int i = i_rowCount-1; i > 0; i--)
+		{
+			do
+			{
+				i_j = rand();
+			} while (i_j >= i_limit);
+			i_j %= i_rowCount;
+			strcpy( psz_tmp, shuffle[i_j] );
+			strcpy( shuffle[i_j], shuffle[i] );
+			strcpy( shuffle[i], psz_tmp );
+		}
+		for( int i = 0; i < i_rowCount; i++)
+		{
+			playlist_Add( THEPL, shuffle[i], NULL, PLAYLIST_APPEND, PLAYLIST_END, true,false );
+		}
 	}
 }
 
