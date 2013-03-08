@@ -714,8 +714,6 @@ void StandardPLPanel::cycleViews()
 
 void StandardPLPanel::shufflePlaylist()
 {
- /*My code to shuffle and fill the Playlist*/
-	//playlist_Lock( THEPL );
 	PLModel *p_plModel = PLModel::getPLModel(StandardPLPanel::p_intf);
 	int i_rowCount = p_plModel->rowCount();
 	unsigned int i_max = 0;
@@ -727,11 +725,12 @@ void StandardPLPanel::shufflePlaylist()
 
 	}
 
-	char shuffle[i_rowCount][i_max + 1];
+
 
 	if( i_rowCount > 1 )
 	{
 
+		char shuffle[i_rowCount][i_max + 1];
 	    QModelIndexList l;
 	    for( int i = 0; i < i_rowCount; i++)
 	    {
@@ -743,17 +742,16 @@ void StandardPLPanel::shufflePlaylist()
 	    p_plModel->doDelete(l);
 
 	    srand( time(NULL) );
-	    int i_ub, i_j;
 	    char psz_tmp[i_max + 1];
+	    int i_limit = RAND_MAX - RAND_MAX % i_rowCount;
+	    int i_j;
 	    for( int i = i_rowCount-1; i > 0; i--)
 	    {
-	    	i_ub = RAND_MAX - ( ( RAND_MAX % (i + 1) ) + 1);
-
 	    	do
 	    	{
-	    		i_j = rand() & (i + 1);
-	    	} while (i_j > i_ub);
-
+	    		i_j = rand();
+	    	} while (i_j >= i_limit);
+	    	i_j %= i_rowCount;
 	    	strcpy( psz_tmp, shuffle[i_j] );
 	    	strcpy( shuffle[i_j], shuffle[i] );
 	    	strcpy( shuffle[i], psz_tmp );
@@ -763,9 +761,6 @@ void StandardPLPanel::shufflePlaylist()
 	    	playlist_Add( THEPL, shuffle[i], NULL, PLAYLIST_APPEND, PLAYLIST_END, true,false );
 	    }
 	}
-
-	//playlist_Unlock( THEPL );
-
 }
 
 void StandardPLPanel::activate( const QModelIndex &index )
